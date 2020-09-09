@@ -3,6 +3,12 @@
 
 ## Instalação
 
+Verifique a versão do python:
+
+`python --version`
+
+Funciona na versão a partir da 3.5
+
 Selecione o diretório:
 
 ```
@@ -33,3 +39,4 @@ Caso houve algum erro favor instalar os seguintes pacotes.
 `pip install django_extensions`
 
 `pip install django-cors-headers`
+
