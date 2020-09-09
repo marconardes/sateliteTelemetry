@@ -1,0 +1,124 @@
+{% extends "polls/base.html" %}
+
+{% block content %}
+<div id = "dados"></div>
+
+<script>
+setInterval(function(){
+     var dmJSON = "http://localhost:8000/polls/api";
+    $.getJSON(dmJSON, function( data ) {
+        $( "#dados" ).empty();
+
+      var items = [];
+      items.push("<h4 > Mensagem do Balão " + data['results1'][0]['contador_mensagens']+"</h4>")
+      items.push("<div class='row'>")
+
+           items.push("<div class='col'>")
+               items.push("<h5>Dados da Estação</h5>")
+               items.push("<p> *Latitude: "+data['results2'][0]['latitude_antena']+"</p>")
+               items.push("<p> *Longitude: "+data['results2'][0]['longitude_antena']+"</p>")
+               items.push("<p> *Altitude: "+data['results2'][0]['altitude_ant']+" m</p>")
+               var d = new Date();
+               var m = d.getMonth() +1
+               items.push("<p> *Data:"+d.getDate()+"/"+m+"/"+d.getFullYear()	+"</p>")
+               items.push("<p> *Hora:"+d.getHours()	+":"+ d.getMinutes() +":"+ d.getSeconds()+"</p>")
+
+           items.push("</div>")
+
+           items.push("<div class='col'>")
+               items.push("<h5>Dados da Antena</h5>")
+               items.push("<p> *Distancia: "+data['results3'][2]+" m</p>")
+               items.push("<p> *Azimute: "+data['results3'][0]+"</p>")
+               items.push("<p> *Elevação: "+data['results3'][1]+"</p>")
+          items.push("</div>")
+
+
+          items.push("<div class='col'>")
+
+               items.push("<h5>Dados GPS</h5>")
+               items.push("<p> Latitude: "+data['results1'][0]['latitude_gps']+"</p>")
+               items.push("<p> Longitude: "+data['results1'][0]['longitude_gps']+"</p>")
+               items.push("<p> Altitude: "+data['results1'][0]['altitude_gps']+" m</p>")
+               items.push("<p> Data:"+data['results1'][0]['dia']+"/"+data['results1'][0]['mes']+"/"+data['results1'][0]['ano']+"</p>")
+               items.push("<p> Hora:"+data['results1'][0]['hora']+":"+ data['results1'][0]['minuto'] +":"+ data['results1'][0]['segundo']+"</p>")
+           items.push("</div>")
+
+           items.push("<div class='col'>")
+           items.push("<h5>Dados GPS Telemetria</h5>")
+               items.push("<p> HDOP: "+data['results1'][0]['hdop']+"</p>")
+               items.push("<p> Satélites: "+data['results1'][0]['nro_satelite']+"</p>")
+               items.push("<p> Velocidades: "+data['results1'][0]['speed']+" m/s</p>")
+               items.push("<p> Curso: "+data['results1'][0]['curso']+"&deg;</p>")
+               items.push("<p> Pot. Rec. no Balão: "+data['results1'][0]['pot_rec_bal']+" dBm</p>")
+
+
+          items.push("</div>")
+
+
+
+      items.push("</div>")
+
+       items.push("<div id='carga' class='row'>")
+
+            items.push("<div id='carga1' class='col'>")
+                        items.push("<h5>Carga</h5>")
+                  items.push("<p> Temperatura: "+data['results1'][0]['temp_ext']+" &degC</p>")
+                  items.push("<p> Temperatura interna um: "+data['results1'][0]['temp_inter_um']+" &degC</p>")
+                  items.push("<p> Temperatura  interna dois: "+data['results1'][0]['temp_inter_dois']+" &degC</p>")
+                  items.push("<p> Pressão: "+data['results1'][0]['pressao']+" hPa</p>")
+                  items.push("<p> Pressão NM: "+data['results1'][0]['pressao_mar']+" hPa</p>")
+                  items.push("<p> Altitude: "+data['results1'][0]['altitude_BMP']+"m</p>")
+                  items.push("<p> *Potencia Configurada: "+data['results1'][0]['pot_tx_no_balao']+"dBm</p>")
+            items.push("</div>")
+
+            items.push("<div id='carga2' class='col'>")
+                items.push("<h5>Situação</h5>")
+                items.push("<p> *Aquecedor: "+data['results1'][0]['status_header']+"</p>")
+                items.push("<p> *Controle de temperatura: "+data['results1'][0]['status_temperatura']+"</p>")
+
+                items.push("<p> *Sensor DS18B20: "+data['results1'][0]['ds18b20']+"</p>")
+                items.push("<p> *Sensor BMP180: "+data['results1'][0]['bmp180']+"</p>")
+                items.push("<p> *SD Card: "+data['results1'][0]['sdcard']+"</p>")
+                items.push("<p> *GPS: "+data['results1'][0]['gpsPresent']+"</p>")
+                items.push("<p> *Potência Recebida na Estação: "+data['results1'][0]['potenc_est']+"dBm</p>")
+
+             items.push("</div>")
+           items.push("</div>")
+             items.push("<div class='row'>")
+             items.push("<table class='col-sm-10 table table-striped'>")
+                items.push("<thead class='thead-dark'>")
+                    items.push("<tr>")
+                        items.push("<th>Mensagem</th>")
+                        items.push("<th>Latitude GPS</th>")
+                        items.push("<th>Longitude GPS</th>")
+                    items.push("</tr>")
+                items.push("</thead>")
+                items.push("<tbody>")
+
+
+                        $(data['results1']).each(function (item) {
+                            items.push("<tr>")
+                                items.push("<td>"+this['contador_mensagens']+"</td>")
+                                items.push("<td>"+this['latitude_gps']+"</td>")
+                                items.push("<td>"+this['longitude_gps']+"</td>")
+                            items.push("</tr>")
+                        });
+
+                items.push("</tbody>")
+             items.push("</table>")
+              items.push("</div>")
+       items.push("</div>")
+
+
+
+
+      $( "<div/>", {
+        "class": "myDataClass",
+        html: items.join( "" )
+      }).appendTo( "#dados" );
+    });
+
+}, 2000) /* time in milliseconds (ie 2 seconds)*/
+
+</script>
+{% endblock %}
